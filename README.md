@@ -1,6 +1,13 @@
-DetermineMasterworkPrice
-========================
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package oglesby;
+
 import java.util.*;
+
+import java.io.*;
 
 public class DetermineMasterworkPrice
 {
@@ -9,7 +16,7 @@ private String artistFirstName;
 private String artistLastName;
 private String titleOfWork;
 private String classification;
-//private date dateOfWork;
+//private Date dateOfWork;
 private double height;
 private double width;
 private String medium;
@@ -18,91 +25,72 @@ private double suggestedMaximumPurchasePrice;
 
 
 
+    //Desc: Executes the major methods that allow a user to buy a painting.
+    // First the user must input values, then the user will view the
+    //suggested price. If the user chooses by buy then the bought painting file
+    //will be updated, otherwise the user can go back to the main
+    //menu
+    //Pre: The coefficient of similarity must not be zero, otherwise
+    //the user is not interested in buying the painting.
+    //Post: The user will have viewed the suggested maximum price for
+    //the painting they want to buy. If they chose to buy it, the files are
+    //now updated accordingingly.
+    public static void executeDetermineMasterworkPrice()
+    {
+        /*Painting toBuy = getValuesFromUser();
+        if (userBuyChoice(determineMasterworkPrice())
+                addRecordBoughtPaintingFile(toBuy);
+        //else
+        //go back to menu */
+    }
+
     //Desc: constructor for DetermineOtherWorkPrice
-	//Post: allows class to set the value of all Painting fields 
+    //Post: allows class to set the value of all Painting fields
     // in a record
-    public DetermineMasterworkPrice(String fname, String lname, String work, String clas, double h,double w, String med, String sub, double max)
+    public DetermineMasterworkPrice(String fname , String lname, String work) //Date dwork, String clas, double h,double w, String med, String sub, double max)
     {
 		artistFirstName=fname;
 		artistLastName=lname;
-		titleOfWork=work;
-	//	dateOfWork=dwork
+		titleOfWork=work;/*
+		Date =dwork;
 		classification=clas;
 		height=h;
 		width=w;
 		medium=med;
 		subject=sub;
-		suggestedMaximumPurchasePrice=max;
+		suggestedMaximumPurchasePrice=max;*/
     }
 
 
 
 
-    //Desc: Looks through the bought file for paintings by the same artist
-    //and computes the coefficient of similarity for that painting. 
-    //It will return the purchase price for the painting with the 
-    //highest coefficient of similarity
-    //Pre: There must be another painting by the same artist in 
-    //the painting file
-    //Return: The price of the painting with the highest coefficient
-    //of similarity
-    public static double findLargestCoefficientofSimilarity()
-    {
 
-    	double coeff=0;
-    	double dummycoeff=0;
-    	int score1=0;
-    	int score2=0;
-    	double largerarea=0;
-    	double smallerArea=0;
-    	double suggestMaxPrice=0;
 
-       // create  determineMostSimilarWork object
-
-     /*   loop through array for bought paintings objects
-        {
-        	find(artistname)
-        	score1=computeScore(getmedium(), medium)
-    		score2=computeScore(getsubject(), subject)
-        	smallerArea=width*height 
-        	largerArea=getWidth()*getHeight() 
-    		largerarea=compareReturnLarger(largerarea, smallerArea)
-    		smallerArea=compareReturnSmaller(largerarea, smallerArea)
-			dummycoeff=computeCoefficientofSimilarity(score1, 
-                        smallerArea, largerarea)
-			if (coeff<dummycoeff)
-			{
-				coeff=dummycoeff
-				suggestMaxPrice=maxpurchaseprice
-			}
-    	}*/
-    	return suggestMaxPrice;
-    }
-
-    
-    
     //Desc: calculate the price for the Masterwork the user wants to buy
-    //Pre: there must be a most similar work and that work must have a an 
-    //auction purchase price, the user must have entered 
+    //Pre: there must be a most similar work and that work must have a an
+    //auction purchase price, the user must have entered
     // the date of the work correctly
-    //Return: the price of the Masterwork 
-    public static double calculateMasterworkPrice()
+    //Return: the price of the Masterwork
+    public double calculateMasterworkPrice()
     {
-    	double auctionPurchasePrice=findLargestCoefficientofSimilarity();
-    	int currentYear=0; //getDate()
-    	int auctionYear = 2000;//dateOfWork
-    	double masterworkPrice=auctionPurchasePrice;//*(8.5)^((1/auctionYear)-currentYear) + 1
+        BoughtPainting bp = new BoughtPainting();
+    	double auctionPurchasePrice=bp.findPrice(artistLastName, titleOfWork);
+    	int currentYear=2014; //getDate()
+    	int auctionYear = 1900;//dateOfWork
+        double exp=1/auctionYear-currentYear;
+       //exp=8.5^exp;
+    	double masterworkPrice=auctionPurchasePrice *(8.5);//^((1/auctionYear)-currentYear) + 1;
     	int c= determineCenturyOfCreation(auctionYear);
     	if (c==20)
     		return masterworkPrice*.25;
     	else
     		return masterworkPrice*((21-c)/(22-c));
     }
-        
+
     //Desc: determine a date’s century of creation which is a value between 12 and 21
     //Pre: the argument must be an int value that has to be in the 4th digits
     //Return: the century of creation for the date
-    public static int determineCenturyOfCreation(int i)
+    public  int determineCenturyOfCreation(int i)
     {
         int century;
         if (i<1100) century=0;
@@ -119,5 +107,6 @@ private double suggestedMaximumPurchasePrice;
         return century;
     }
 }
- 
+
+
 
