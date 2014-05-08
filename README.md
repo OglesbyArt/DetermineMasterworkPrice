@@ -16,12 +16,13 @@ private String artistFirstName;
 private String artistLastName;
 private String titleOfWork;
 private String classification;
-//private Date dateOfWork;
+private Date dateOfWork;
 private double height;
 private double width;
 private String medium;
 private String subject;
 private double suggestedMaximumPurchasePrice;
+//BoughtPainting paint = new BoughtPainting();
 
 
 
@@ -35,34 +36,87 @@ private double suggestedMaximumPurchasePrice;
     //Post: The user will have viewed the suggested maximum price for
     //the painting they want to buy. If they chose to buy it, the files are
     //now updated accordingingly.
-    public static void executeDetermineMasterworkPrice()
+    public  void executeDetermineMasterworkPrice()
     {
-        /*Painting toBuy = getValuesFromUser();
+      //  UserInterface ui = new UserInterface();
+      //  BoughtPainting paint = new BoughtPainting();//artistFirstName,
+              //  artistLastName, titleOfWork, classification, dateOfWork, height,
+              //  width,medium, subject , suggestedMaximumPurchasePrice);
+        getValuesFromUser();
+        userBuyChoice(calculateMasterworkPrice());
+        /*
         if (userBuyChoice(determineMasterworkPrice())
-                addRecordBoughtPaintingFile(toBuy);
-        //else
-        //go back to menu */
+                paint.add();
+        else
+        ui.UserInterface()*/
+    }
+
+    //Desc: prompt user to input the artist first name, last name, area of
+    //painting, title of work, date of work, medium and subject of painting user
+    //wants to buy
+    //Post: The artist first name, last name, area of painting, title of
+    //work, date of work, medium and subject of painting user wants to buy have
+    //values input by the user
+    public  void getValuesFromUser()
+    {
+        //UserInterface ui = new UserInterface
+    	Scanner s = new Scanner (System.in);
+        System.out.println("Enter Artist First name: ");
+    	artistFirstName = s.nextLine();
+        System.out.println("Enter Artist Last name: ");
+    	artistLastName= s.nextLine();
+        System.out.println("Enter title of painting: ");
+    	titleOfWork = s.nextLine();
+    /*    System.out.println("Enter date painting was created: ");
+    	String date = s.nextLine();
+        Date dateOfWork = new Date(date); */
+        System.out.println("Enter painting medium: ");
+    	 medium = s.nextLine();
+        System.out.println("Enter painting subject: ");
+    	 subject = s.nextLine();
+        System.out.println("Enter painting width: ");
+        String w= s.nextLine();
+        width = new Double(w);
+        System.out.println("Enter painting height: ");
+        String h = s.nextLine();
+        height = new Double(h);
+
+
+       /* BoughtPainting buy = new BoughtPainting ();
+        buy.setArtistFirstName(firstName);
+        buy.setArtistLastName(lastName);
+        buy.setTitleOfWork(title);
+        buy.setDateofWork(date);
+        buy.setMedium(medium);
+        buy.setSubject(subject);
+        buy.setWidth(width);
+        buy.setHeight(height);
+        return buy;*/
     }
 
     //Desc: constructor for DetermineOtherWorkPrice
     //Post: allows class to set the value of all Painting fields
     // in a record
-    public DetermineMasterworkPrice(String fname , String lname, String work) //Date dwork, String clas, double h,double w, String med, String sub, double max)
+    public DetermineMasterworkPrice(String fname , String lname, String work, //Date dwork,
+            String clas, String med, String sub, double h,double w,double max)
     {
 		artistFirstName=fname;
 		artistLastName=lname;
-		titleOfWork=work;/*
-		Date =dwork;
+		titleOfWork=work;
+		//Date =dwork;
 		classification=clas;
 		height=h;
 		width=w;
 		medium=med;
 		subject=sub;
-		suggestedMaximumPurchasePrice=max;*/
+		suggestedMaximumPurchasePrice=max;
+    
+
     }
+    public  DetermineMasterworkPrice()
+    {
 
-
-
+    }
 
 
 
@@ -74,17 +128,18 @@ private double suggestedMaximumPurchasePrice;
     public double calculateMasterworkPrice()
     {
         BoughtPainting bp = new BoughtPainting();
-    	double auctionPurchasePrice=bp.findPrice(artistLastName, titleOfWork);
+    	double auctionPurchasePrice=bp.findPrice(artistLastName, subject, medium, height*width);
+        return auctionPurchasePrice;
     	int currentYear=2014; //getDate()
     	int auctionYear = 1900;//dateOfWork
-        double exp=1/auctionYear-currentYear;
-       //exp=8.5^exp;
-    	double masterworkPrice=auctionPurchasePrice *(8.5);//^((1/auctionYear)-currentYear) + 1;
-    	int c= determineCenturyOfCreation(auctionYear);
+    	//double masterworkPrice=auctionPurchasePrice*Math.pow(8.5,((1/auctionYear)-currentYear)) + 1;
+    	/*int c= determineCenturyOfCreation(auctionYear);
     	if (c==20)
     		return masterworkPrice*.25;
     	else
     		return masterworkPrice*((21-c)/(22-c));
+         * /
+         */
     }
 
     //Desc: determine a date’s century of creation which is a value between 12 and 21
@@ -105,6 +160,57 @@ private double suggestedMaximumPurchasePrice;
         else if (i<2000) century =20;
         else century=21;
         return century;
+    }
+        //Desc: display a value to the user and the user responds which is returned
+    //      as a true or false value
+    //Pre: the argument must be a double value
+    //Return: a boolean value based on the user’s input
+    public static boolean userBuyChoice(double d) //dont keep
+    {
+    	System.out.println("The price is" +d +". Do you want to buy? y/n");
+    	Scanner s = new Scanner(System.in);
+        String response = s.nextLine();
+        //must do error checking
+        if (response.equalsIgnoreCase("y")) return true;
+        else return false;
+    }
+    public double findPrices(String alastname, String title)
+    {
+        try
+        {
+            File paintingsFile = new File ("GalleryPaintings.dat");
+            boolean found = false;
+            double max=0;
+            double dummyMax=0;
+            if (paintingsFile.exists())
+            {
+                RandomAccessFile inFile = new RandomAccessFile (paintingsFile, "r");
+                while (!found && (inFile.getFilePointer()!=inFile.length()))
+                {
+                    paint.read (inFile);
+                    if (paint.artistLastName.equalsIgnoreCase(alastname) &&
+                    paint.titleOfWork.equalsIgnoreCase(title))
+
+                        dummyMax=suggestedMaximumPurchasePrice;
+                        if(dummyMax>max && (inFile.getFilePointer()==inFile.length()))
+                        {
+                            found = true;
+                            max=dummyMax;
+                        }
+                        else if (dummyMax>max && (inFile.getFilePointer()!=inFile.length()))
+                            max=dummyMax;
+                }
+                inFile.close();
+
+            }
+            return max;
+        }
+        catch (Exception e)
+        {
+            System.out.println ("***** Error: BoughtPainting.find () *****");
+            System.out.println ("\t" + e);
+            return 0;
+        }
     }
 }
 
