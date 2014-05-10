@@ -12,10 +12,10 @@ import java.io.*;
 public class DetermineMasterworkPrice
 {
 
-private String artistFirstName;
+//private String artistFirstName;
 private String artistLastName;
-private String titleOfWork;
-private String classification;
+//private String titleOfWork;
+//private String classification;
 private Date dateOfWork;
 private double height;
 private double width;
@@ -44,11 +44,20 @@ public DetermineMasterworkPrice()
        BoughtPainting bp = new BoughtPainting();
 
         getValuesFromUser();
-       
-        System.out.println(calculateMasterworkPrice());
-        if ( userBuyChoice(8))
-                bp.add();
-       
+        suggestedMaximumPurchasePrice=calculateMasterworkPrice();
+
+        if ( userBuyChoice(suggestedMaximumPurchasePrice))
+        {
+                bp.setArtistLastName(artistLastName);
+                bp.setDateofWork(dateOfWork);
+                bp.setHeight(height);
+                bp.setWidth(width);
+                bp.setMedium(medium);
+                bp.setSubject(subject);
+                bp.setSuggestedMaximumPurchasePrice(suggestedMaximumPurchasePrice);
+                bp.addRecentlyBought();
+        }
+
        // else
        // UserInterface.UserInterface();
     }
@@ -63,23 +72,9 @@ public DetermineMasterworkPrice()
     {
         try
         {
-      //      System.out.println("Enter Artist First name: ");
-      //      artistFirstName = UserInterface.getString();
 
             System.out.println("Enter Artist Last name: ");
             artistLastName= UserInterface.getString();
-
-      //      System.out.println("Enter title of painting: ");
-      //      titleOfWork = UserInterface.getString();
-
-            System.out.println("Enter classification of Painting (masterpiece, masterwork, or other): ");
-            classification = UserInterface.getString();
-            while (!(classification.equalsIgnoreCase("masterpiece")|classification.equalsIgnoreCase("masterwork")|
-                    classification.equalsIgnoreCase("other")))
-            {
-                System.out.println("Classification entered incorrectly. Please enter one of the following mediums: masterpiece, masterwork, or other.");
-                classification=UserInterface.getString();
-            }
 
             System.out.println("Enter the date the painting was created (mm/dd/yyyy): ");
             Date tempdate = new Date(UserInterface.getString());
@@ -151,19 +146,22 @@ public DetermineMasterworkPrice()
     //Return: the price of the Masterwork
     public double calculateMasterworkPrice()
     {
-        BoughtPainting bp = new BoughtPainting();
-        AuctionPainting mp = new AuctionPainting();
 
-    	double auctionPurchasePrice=bp.findPrice(artistLastName, subject, medium, height*width);
+        AuctionPainting ap = new AuctionPainting();
+
+    	double auctionPurchasePrice=ap.findPrice(artistLastName, subject, medium, height*width);
     	Date currentDate =new Date();
     	Calendar cal = Calendar.getInstance();
         cal.setTime(dateOfWork);
         int dateOfWorkYear = cal.get(Calendar.YEAR);
       
-        cal.setTime(mp.getDateofAuction());
+        cal.setTime(ap.getDateofAuction());
         int dateOfAuctionYear = cal.get(Calendar.YEAR);
 
-        double masterworkPrice = auctionPurchasePrice* Math.pow((1+.085), 2014-dateOfAuctionYear);
+        cal.setTime(currentDate);
+        int currentDateYear = cal.get(Calendar.YEAR);
+
+        double masterworkPrice = auctionPurchasePrice* Math.pow((1+.085), currentDateYear-dateOfAuctionYear);
     	int c= determineCenturyOfCreation(dateOfWorkYear);
     	if (c==20)
     		return masterworkPrice*.25;
