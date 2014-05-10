@@ -58,8 +58,8 @@ public DetermineMasterworkPrice()
                 bp.addRecentlyBought();
         }
 
-       // else
-       // UserInterface.UserInterface();
+        else
+        UserInterface.pressEnter();
     }
 
     //Desc: prompt user to input the artist first name, last name, area of
@@ -116,7 +116,7 @@ public DetermineMasterworkPrice()
 
     }
 
-    //Desc: constructor for DetermineOtherWorkPrice
+ /*   //Desc: constructor for DetermineOtherWorkPrice
     //Post: allows class to set the value of all Painting fields
     // in a record
     public DetermineMasterworkPrice(String fname , String lname, String work, Date dwork,
@@ -134,7 +134,7 @@ public DetermineMasterworkPrice()
 		suggestedMaximumPurchasePrice=max;
     
 //may delete this
-    }
+    }*/
 
 
 
