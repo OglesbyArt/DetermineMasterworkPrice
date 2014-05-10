@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package artpricingsystem;
+package oglesby;
 
 import java.util.*;
 
@@ -42,9 +42,9 @@ private double suggestedMaximumPurchasePrice;
        BoughtPainting bp = new BoughtPainting();
 
         getValuesFromUser();
-        userBuyChoice(calculateMasterworkPrice());
+       
         
-        if (userBuyChoice(determineMasterworkPrice()))
+        if ( userBuyChoice(calculateMasterworkPrice()))
                 bp.add();
         else
         ui.UserInterface();
