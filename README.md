@@ -22,9 +22,12 @@ private double width;
 private String medium;
 private String subject;
 private double suggestedMaximumPurchasePrice;
-//BoughtPainting paint = new BoughtPainting();
 
 
+public DetermineMasterworkPrice()
+{
+    executeDetermineMasterworkPrice();
+}
 
     //Desc: Executes the major methods that allow a user to buy a painting.
     // First the user must input values, then the user will view the
@@ -38,16 +41,16 @@ private double suggestedMaximumPurchasePrice;
     //now updated accordingingly.
     public  void executeDetermineMasterworkPrice()
     {
-       UserInterface ui = new UserInterface();
        BoughtPainting bp = new BoughtPainting();
 
         getValuesFromUser();
        
-        
-        if ( userBuyChoice(calculateMasterworkPrice()))
+        System.out.println(calculateMasterworkPrice());
+        if ( userBuyChoice(8))
                 bp.add();
-        else
-        ui.UserInterface();
+       
+       // else
+       // UserInterface.UserInterface();
     }
 
     //Desc: prompt user to input the artist first name, last name, area of
@@ -58,51 +61,76 @@ private double suggestedMaximumPurchasePrice;
     //values input by the user
     public  void getValuesFromUser()
     {
-        //UserInterface ui = new UserInterface
-    	Scanner s = new Scanner (System.in);
-        System.out.println("Enter Artist First name: ");
-    	artistFirstName = s.nextLine();
-        System.out.println("Enter Artist Last name: ");
-    	artistLastName= s.nextLine();
-        System.out.println("Enter title of painting: ");
-    	titleOfWork = s.nextLine();
-    /*    System.out.println("Enter date painting was created: ");
-    	String date = s.nextLine();
-        Date dateOfWork = new Date(date); */
-        System.out.println("Enter painting medium: ");
-    	 medium = s.nextLine();
-        System.out.println("Enter painting subject: ");
-    	 subject = s.nextLine();
-        System.out.println("Enter painting width: ");
-        String w= s.nextLine();
-        width = new Double(w);
-        System.out.println("Enter painting height: ");
-        String h = s.nextLine();
-        height = new Double(h);
+        try
+        {
+      //      System.out.println("Enter Artist First name: ");
+      //      artistFirstName = UserInterface.getString();
+
+            System.out.println("Enter Artist Last name: ");
+            artistLastName= UserInterface.getString();
+
+      //      System.out.println("Enter title of painting: ");
+      //      titleOfWork = UserInterface.getString();
+
+            System.out.println("Enter classification of Painting (masterpiece, masterwork, or other): ");
+            classification = UserInterface.getString();
+            while (!(classification.equalsIgnoreCase("masterpiece")|classification.equalsIgnoreCase("masterwork")|
+                    classification.equalsIgnoreCase("other")))
+            {
+                System.out.println("Classification entered incorrectly. Please enter one of the following mediums: masterpiece, masterwork, or other.");
+                classification=UserInterface.getString();
+            }
+
+            System.out.println("Enter the date the painting was created (mm/dd/yyyy): ");
+            Date tempdate = new Date(UserInterface.getString());
+            dateOfWork=tempdate;
+
+            System.out.println("Enter painting medium (oil, watercolor, or other): ");
+            medium  = UserInterface.getString();
+            while (!(medium.equalsIgnoreCase("oil")|medium.equalsIgnoreCase("watercolor")|
+                    medium.equalsIgnoreCase("other")))
+            {
+                System.out.println("Medium entered incorrectly. Please enter one of the following mediums: oil, watercolor, or other.");
+                medium=UserInterface.getString();
+            }
+
+            System.out.println("Enter painting subject (portrait, still-life, landscape, or other): ");
+            subject =UserInterface.getString();
+            while (!(subject.equalsIgnoreCase("portrait")|subject.equalsIgnoreCase("still-life")|
+            subject.equalsIgnoreCase("landscape")| subject.equalsIgnoreCase("other")))
+            {
+                System.out.println("Subject entered incorrectly. Please enter one of the following subjects: portrait, still-life, landscape, or other.");
+                subject=UserInterface.getString();
+            }
+
+            System.out.println("Enter painting width: ");
+            Double tempw=new Double( UserInterface.getString());
+            width =tempw;
+
+            System.out.println("Enter painting height: ");
+            Double temph=new Double(UserInterface.getString());
+            height =temph;
+        }
+
+        catch (Exception e)
+        {
+           System.out.println("Record value entered is not the correct data type. Please re-enter the record: ");
+           getValuesFromUser();
+        }
 
 
-       /* BoughtPainting buy = new BoughtPainting ();
-        buy.setArtistFirstName(firstName);
-        buy.setArtistLastName(lastName);
-        buy.setTitleOfWork(title);
-        buy.setDateofWork(date);
-        buy.setMedium(medium);
-        buy.setSubject(subject);
-        buy.setWidth(width);
-        buy.setHeight(height);
-        return buy;*/
     }
 
     //Desc: constructor for DetermineOtherWorkPrice
     //Post: allows class to set the value of all Painting fields
     // in a record
-    public DetermineMasterworkPrice(String fname , String lname, String work, //Date dwork,
+    public DetermineMasterworkPrice(String fname , String lname, String work, Date dwork,
             String clas, String med, String sub, double h,double w,double max)
     {
 		artistFirstName=fname;
 		artistLastName=lname;
 		titleOfWork=work;
-		//Date =dwork;
+		dateOfWork =dwork;
 		classification=clas;
 		height=h;
 		width=w;
@@ -110,7 +138,7 @@ private double suggestedMaximumPurchasePrice;
 		subject=sub;
 		suggestedMaximumPurchasePrice=max;
     
-
+//may delete this
     }
 
 
@@ -124,16 +152,24 @@ private double suggestedMaximumPurchasePrice;
     public double calculateMasterworkPrice()
     {
         BoughtPainting bp = new BoughtPainting();
+        AuctionPainting mp = new AuctionPainting();
+
     	double auctionPurchasePrice=bp.findPrice(artistLastName, subject, medium, height*width);
-    	int currentYear=2014; //getDate()
-    	int auctionYear = 1541;//dateOfWork
-    	//double masterworkPrice=auctionPurchasePrice*Math.pow(8.5,((1/auctionYear)-currentYear)) + 1;
-    	/*int c= determineCenturyOfCreation(auctionYear);
+    	Date currentDate =new Date();
+    	Calendar cal = Calendar.getInstance();
+        cal.setTime(dateOfWork);
+        int dateOfWorkYear = cal.get(Calendar.YEAR);
+      
+        cal.setTime(mp.getDateofAuction());
+        int dateOfAuctionYear = cal.get(Calendar.YEAR);
+
+        double masterworkPrice = auctionPurchasePrice* Math.pow((1+.085), 2014-dateOfAuctionYear);
+    	int c= determineCenturyOfCreation(dateOfWorkYear);
     	if (c==20)
     		return masterworkPrice*.25;
     	else
-    		return masterworkPrice*((21-c)/(22-c));*/
-         return auctionPurchasePrice;
+    		return masterworkPrice*((21-c)/(22-c));
+         
          
     }
 
@@ -160,14 +196,21 @@ private double suggestedMaximumPurchasePrice;
     //      as a true or false value
     //Pre: the argument must be a double value
     //Return: a boolean value based on the user’s input
-    public static boolean userBuyChoice(double d) //dont keep
+    public static boolean userBuyChoice(double d) 
     {
     	System.out.println("The price is" +d +". Do you want to buy? y/n");
-    	Scanner s = new Scanner(System.in);
-        String response = s.nextLine();
-        //must do error checking
-        if (response.equalsIgnoreCase("y")) return true;
+    	String choice=UserInterface.getString();
+        while (!choice.equalsIgnoreCase("y")&&!choice.equalsIgnoreCase("n"))
+        {
+            System.out.println("Please enter the correct format, either y or n");
+            System.out.println("The price is" +d +". Do you want to buy? y/n");
+            choice=UserInterface.getString();
+        }
+
+        if (choice.equalsIgnoreCase("y")) return true;
         else return false;
+
+
     }
 
 }
