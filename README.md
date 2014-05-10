@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package oglesby;
+package artpricingsystem;
 
 import java.util.*;
 
@@ -38,17 +38,16 @@ private double suggestedMaximumPurchasePrice;
     //now updated accordingingly.
     public  void executeDetermineMasterworkPrice()
     {
-      //  UserInterface ui = new UserInterface();
-      //  BoughtPainting paint = new BoughtPainting();//artistFirstName,
-              //  artistLastName, titleOfWork, classification, dateOfWork, height,
-              //  width,medium, subject , suggestedMaximumPurchasePrice);
+       UserInterface ui = new UserInterface();
+       BoughtPainting bp = new BoughtPainting();
+
         getValuesFromUser();
         userBuyChoice(calculateMasterworkPrice());
-        /*
-        if (userBuyChoice(determineMasterworkPrice())
-                paint.add();
+        
+        if (userBuyChoice(determineMasterworkPrice()))
+                bp.add();
         else
-        ui.UserInterface()*/
+        ui.UserInterface();
     }
 
     //Desc: prompt user to input the artist first name, last name, area of
@@ -113,10 +112,7 @@ private double suggestedMaximumPurchasePrice;
     
 
     }
-    public  DetermineMasterworkPrice()
-    {
 
-    }
 
 
 
@@ -129,17 +125,16 @@ private double suggestedMaximumPurchasePrice;
     {
         BoughtPainting bp = new BoughtPainting();
     	double auctionPurchasePrice=bp.findPrice(artistLastName, subject, medium, height*width);
-        return auctionPurchasePrice;
     	int currentYear=2014; //getDate()
-    	int auctionYear = 1900;//dateOfWork
+    	int auctionYear = 1541;//dateOfWork
     	//double masterworkPrice=auctionPurchasePrice*Math.pow(8.5,((1/auctionYear)-currentYear)) + 1;
     	/*int c= determineCenturyOfCreation(auctionYear);
     	if (c==20)
     		return masterworkPrice*.25;
     	else
-    		return masterworkPrice*((21-c)/(22-c));
-         * /
-         */
+    		return masterworkPrice*((21-c)/(22-c));*/
+         return auctionPurchasePrice;
+         
     }
 
     //Desc: determine a date’s century of creation which is a value between 12 and 21
@@ -174,44 +169,7 @@ private double suggestedMaximumPurchasePrice;
         if (response.equalsIgnoreCase("y")) return true;
         else return false;
     }
-    public double findPrices(String alastname, String title)
-    {
-        try
-        {
-            File paintingsFile = new File ("GalleryPaintings.dat");
-            boolean found = false;
-            double max=0;
-            double dummyMax=0;
-            if (paintingsFile.exists())
-            {
-                RandomAccessFile inFile = new RandomAccessFile (paintingsFile, "r");
-                while (!found && (inFile.getFilePointer()!=inFile.length()))
-                {
-                    paint.read (inFile);
-                    if (paint.artistLastName.equalsIgnoreCase(alastname) &&
-                    paint.titleOfWork.equalsIgnoreCase(title))
 
-                        dummyMax=suggestedMaximumPurchasePrice;
-                        if(dummyMax>max && (inFile.getFilePointer()==inFile.length()))
-                        {
-                            found = true;
-                            max=dummyMax;
-                        }
-                        else if (dummyMax>max && (inFile.getFilePointer()!=inFile.length()))
-                            max=dummyMax;
-                }
-                inFile.close();
-
-            }
-            return max;
-        }
-        catch (Exception e)
-        {
-            System.out.println ("***** Error: BoughtPainting.find () *****");
-            System.out.println ("\t" + e);
-            return 0;
-        }
-    }
 }
 
 
