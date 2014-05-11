@@ -7,15 +7,11 @@ package oglesby;
 
 import java.util.*;
 
-import java.io.*;
 
 public class DetermineMasterworkPrice
 {
 
-//private String artistFirstName;
 private String artistLastName;
-//private String titleOfWork;
-//private String classification;
 private Date dateOfWork;
 private double height;
 private double width;
@@ -24,125 +20,47 @@ private String subject;
 private double suggestedMaximumPurchasePrice;
 
 
-public DetermineMasterworkPrice()
-{
-    executeDetermineMasterworkPrice();
-}
+     //Desc: constructor for DetermineMasterworkPrice
+     //Post: Creates a new DetermineMasterworkPrice
+     public DetermineMasterworkPrice()
+     {
+    	executeDetermineMasterworkPrice();
+     }
 
     //Desc: Executes the major methods that allow a user to buy a painting.
-    // First the user must input values, then the user will view the
-    //suggested price. If the user chooses by buy then the bought painting file
-    //will be updated, otherwise the user can go back to the main
-    //menu
+    //  First the user must input values, then the user will view the
+    //  suggested price. If the user chooses by buy then the bought painting
+    //  file will be updated, otherwise the user can go back to the main
+    //  menu
     //Pre: The coefficient of similarity must not be zero, otherwise
-    //the user is not interested in buying the painting.
+    //  the user is not interested in buying the painting.
     //Post: The user will have viewed the suggested maximum price for
-    //the painting they want to buy. If they chose to buy it, the files are
-    //now updated accordingingly.
+    //  the painting they want to buy. If they chose to buy it, the files are
+    //  now updated accordingingly.
     public  void executeDetermineMasterworkPrice()
     {
        BoughtPainting bp = new BoughtPainting();
 
-        getValuesFromUser();
+        bp.readInRecord();
+        artistLastName=bp.getArtistLastName();
+        dateOfWork= bp.getDateofWork();
+        height=bp.getHeight();
+        width=bp.getWidth();
+        medium=bp.getMedium();
+        subject=bp.getSubject();
+
         suggestedMaximumPurchasePrice=calculateMasterworkPrice();
 
         if ( userBuyChoice(suggestedMaximumPurchasePrice))
-        {
-                bp.setArtistLastName(artistLastName);
-                bp.setDateofWork(dateOfWork);
-                bp.setHeight(height);
-                bp.setWidth(width);
-                bp.setMedium(medium);
-                bp.setSubject(subject);
-                bp.setSuggestedMaximumPurchasePrice(suggestedMaximumPurchasePrice);
+
                 bp.addRecentlyBought();
-        }
-
-        else
-        UserInterface.pressEnter();
+        else UserInterface.pressEnter();
     }
-
-    //Desc: prompt user to input the artist first name, last name, area of
-    //painting, title of work, date of work, medium and subject of painting user
-    //wants to buy
-    //Post: The artist first name, last name, area of painting, title of
-    //work, date of work, medium and subject of painting user wants to buy have
-    //values input by the user
-    public  void getValuesFromUser()
-    {
-        try
-        {
-
-            System.out.println("Enter Artist Last name: ");
-            artistLastName= UserInterface.getString();
-
-            System.out.println("Enter the date the painting was created (mm/dd/yyyy): ");
-            Date tempdate = new Date(UserInterface.getString());
-            dateOfWork=tempdate;
-
-            System.out.println("Enter painting medium (oil, watercolor, or other): ");
-            medium  = UserInterface.getString();
-            while (!(medium.equalsIgnoreCase("oil")|medium.equalsIgnoreCase("watercolor")|
-                    medium.equalsIgnoreCase("other")))
-            {
-                System.out.println("Medium entered incorrectly. Please enter one of the following mediums: oil, watercolor, or other.");
-                medium=UserInterface.getString();
-            }
-
-            System.out.println("Enter painting subject (portrait, still-life, landscape, or other): ");
-            subject =UserInterface.getString();
-            while (!(subject.equalsIgnoreCase("portrait")|subject.equalsIgnoreCase("still-life")|
-            subject.equalsIgnoreCase("landscape")| subject.equalsIgnoreCase("other")))
-            {
-                System.out.println("Subject entered incorrectly. Please enter one of the following subjects: portrait, still-life, landscape, or other.");
-                subject=UserInterface.getString();
-            }
-
-            System.out.println("Enter painting width: ");
-            Double tempw=new Double( UserInterface.getString());
-            width =tempw;
-
-            System.out.println("Enter painting height: ");
-            Double temph=new Double(UserInterface.getString());
-            height =temph;
-        }
-
-        catch (Exception e)
-        {
-           System.out.println("Record value entered is not the correct data type. Please re-enter the record: ");
-           getValuesFromUser();
-        }
-
-
-    }
-
- /*   //Desc: constructor for DetermineOtherWorkPrice
-    //Post: allows class to set the value of all Painting fields
-    // in a record
-    public DetermineMasterworkPrice(String fname , String lname, String work, Date dwork,
-            String clas, String med, String sub, double h,double w,double max)
-    {
-		artistFirstName=fname;
-		artistLastName=lname;
-		titleOfWork=work;
-		dateOfWork =dwork;
-		classification=clas;
-		height=h;
-		width=w;
-		medium=med;
-		subject=sub;
-		suggestedMaximumPurchasePrice=max;
-    
-//may delete this
-    }*/
-
-
-
 
     //Desc: calculate the price for the Masterwork the user wants to buy
     //Pre: there must be a most similar work and that work must have a an
-    //auction purchase price, the user must have entered
-    // the date of the work correctly
+    //  auction purchase price, the user must have entered
+    //  the date of the work correctly
     //Return: the price of the Masterwork
     public double calculateMasterworkPrice()
     {
@@ -150,6 +68,10 @@ public DetermineMasterworkPrice()
         AuctionPainting ap = new AuctionPainting();
 
     	double auctionPurchasePrice=ap.findPrice(artistLastName, subject, medium, height*width);
+        if (auctionPurchasePrice==0)
+        {
+            UserInterface.pressEnter();
+        }
     	Date currentDate =new Date();
     	Calendar cal = Calendar.getInstance();
         cal.setTime(dateOfWork);
@@ -168,10 +90,10 @@ public DetermineMasterworkPrice()
     	else
     		return masterworkPrice*((21-c)/(22-c));
          
-         
     }
 
-    //Desc: determine a date’s century of creation which is a value between 12 and 21
+    //Desc: determine a date’s century of creation which
+    //  is a value between 12 and 21
     //Pre: the argument must be an int value that has to be in the 4th digits
     //Return: the century of creation for the date
     public  int determineCenturyOfCreation(int i)
@@ -190,8 +112,9 @@ public DetermineMasterworkPrice()
         else century=21;
         return century;
     }
-        //Desc: display a value to the user and the user responds which is returned
-    //      as a true or false value
+    
+    //Desc: display a value to the user and the user responds 
+    //  which is returned as a true or false value
     //Pre: the argument must be a double value
     //Return: a boolean value based on the user’s input
     public static boolean userBuyChoice(double d) 
@@ -207,8 +130,6 @@ public DetermineMasterworkPrice()
 
         if (choice.equalsIgnoreCase("y")) return true;
         else return false;
-
-
     }
 
 }
