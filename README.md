@@ -8,7 +8,7 @@ package oglesby;
 import java.util.*;
 
 
-public class DetermineMasterworkPrice
+class DetermineMasterworkPrice
 {
 
 private String artistLastName;
