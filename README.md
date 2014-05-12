@@ -37,11 +37,21 @@ class DetermineMasterworkPrice
 
         bp.readInRecord();
         double area =bp.getHeight()*bp.getWidth();
+        boolean choice=false;
         double suggestedMaximumPurchasePrice=calculateMasterworkPrice(bp.getArtistLastName(), bp.getSubject(), bp.getMedium(),area, bp.getDateofWork() );
 
-        if ( userBuyChoice(suggestedMaximumPurchasePrice))
+       if (suggestedMaximumPurchasePrice==0)
+        {
+            choice=false;
+        }
+        else choice = userBuyChoice(suggestedMaximumPurchasePrice);
+        if ( choice)
+        {
+            bp.setSuggestedMaximumPurchasePrice(suggestedMaximumPurchasePrice);
+            bp.addRecentlyBought();
+            UserInterface.pressEnter();
+        }
 
-                bp.addRecentlyBought();
         else UserInterface.pressEnter();
     }
 
