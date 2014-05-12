@@ -11,22 +11,16 @@ import java.util.*;
 class DetermineMasterworkPrice
 {
 
-private String artistLastName;
-private Date dateOfWork;
-private double height;
-private double width;
-private String medium;
-private String subject;
-private double suggestedMaximumPurchasePrice;
 
 
+/*
      //Desc: constructor for DetermineMasterworkPrice
      //Post: Creates a new DetermineMasterworkPrice
      public DetermineMasterworkPrice()
      {
     	executeDetermineMasterworkPrice();
      }
-
+*/
     //Desc: Executes the major methods that allow a user to buy a painting.
     //  First the user must input values, then the user will view the
     //  suggested price. If the user chooses by buy then the bought painting
@@ -37,19 +31,13 @@ private double suggestedMaximumPurchasePrice;
     //Post: The user will have viewed the suggested maximum price for
     //  the painting they want to buy. If they chose to buy it, the files are
     //  now updated accordingingly.
-    public  void executeDetermineMasterworkPrice()
+    public static void executeDetermineMasterworkPrice()
     {
        BoughtPainting bp = new BoughtPainting();
 
         bp.readInRecord();
-        artistLastName=bp.getArtistLastName();
-        dateOfWork= bp.getDateofWork();
-        height=bp.getHeight();
-        width=bp.getWidth();
-        medium=bp.getMedium();
-        subject=bp.getSubject();
 
-        suggestedMaximumPurchasePrice=calculateMasterworkPrice();
+        suggestedMaximumPurchasePrice=calculateMasterworkPrice((bp.getArtistLastName(), bp.getSubject, bp.getMedium(), bp.getHeight()*bp.getWidth);
 
         if ( userBuyChoice(suggestedMaximumPurchasePrice))
 
@@ -62,12 +50,12 @@ private double suggestedMaximumPurchasePrice;
     //  auction purchase price, the user must have entered
     //  the date of the work correctly
     //Return: the price of the Masterwork
-    public double calculateMasterworkPrice()
+    public static double calculateMasterworkPrice(String artistLastName, String subject, String medium, String area)
     {
 
         AuctionPainting ap = new AuctionPainting();
 
-    	double auctionPurchasePrice=ap.findPrice(artistLastName, subject, medium, height*width);
+    	double auctionPurchasePrice=ap.findPrice(artistLastName, subject, medium, area);
         if (auctionPurchasePrice==0)
         {
             UserInterface.pressEnter();
@@ -96,7 +84,7 @@ private double suggestedMaximumPurchasePrice;
     //  is a value between 12 and 21
     //Pre: the argument must be an int value that has to be in the 4th digits
     //Return: the century of creation for the date
-    public  int determineCenturyOfCreation(int i)
+    public static int determineCenturyOfCreation(int i)
     {
         int century;
         if (i<1100) century=0;
@@ -117,7 +105,7 @@ private double suggestedMaximumPurchasePrice;
     //  which is returned as a true or false value
     //Pre: the argument must be a double value
     //Return: a boolean value based on the user’s input
-    public static boolean userBuyChoice(double d) 
+    public static static boolean userBuyChoice(double d) 
     {
     	System.out.println("The price is" +d +". Do you want to buy? y/n");
     	String choice=UserInterface.getString();
