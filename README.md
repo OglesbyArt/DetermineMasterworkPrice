@@ -42,11 +42,13 @@ class DetermineMasterworkPrice
 
        if (suggestedMaximumPurchasePrice==0)
         {
+
             choice=false;
         }
         else choice = userBuyChoice(suggestedMaximumPurchasePrice);
         if ( choice)
         {
+
             bp.setSuggestedMaximumPurchasePrice(suggestedMaximumPurchasePrice);
             bp.addRecentlyBought();
             UserInterface.pressEnter();
@@ -65,7 +67,7 @@ class DetermineMasterworkPrice
 
        DetermineMostSimilarWork ap = new DetermineMostSimilarWork();
 
-    	double auctionPurchasePrice=ap.findPrice(artistLastName, subject, medium, area);
+    	double auctionPurchasePrice=ap.findPrice(artistLastName, medium, subject, area);
         Date auctiondate;
 
         if (auctionPurchasePrice==0)
@@ -78,19 +80,31 @@ class DetermineMasterworkPrice
         cal.setTime(dateOfWork);
         int dateOfWorkYear = cal.get(Calendar.YEAR);
 
-        auctiondate=ap.findDate(artistLastName, subject, medium, area);
+
+        auctiondate=ap.findDate(artistLastName,medium, subject,  area);
         cal.setTime(auctiondate);
         int dateOfAuctionYear = cal.get(Calendar.YEAR);
+
 
         cal.setTime(currentDate);
         int currentDateYear = cal.get(Calendar.YEAR);
 
+
         double masterworkPrice = auctionPurchasePrice* Math.pow((1+.085), currentDateYear-dateOfAuctionYear);
-    	int c= determineCenturyOfCreation(dateOfWorkYear);
+
+
+   	double c= determineCenturyOfCreation(dateOfWorkYear);
+        System.out.println(c);
     	if (c==20)
     		return masterworkPrice*.25;
     	else
-    		return masterworkPrice*((21-c)/(22-c));
+        {
+
+            double constant =((21-c)/(22-c));
+            return masterworkPrice*constant ;
+            
+        }
+    		
 
     }
 
@@ -98,7 +112,7 @@ class DetermineMasterworkPrice
     //  is a value between 12 and 21
     //Pre: the argument must be an int value that has to be in the 4th digits
     //Return: the century of creation for the date
-    public  static int determineCenturyOfCreation(int i)
+    public  static double determineCenturyOfCreation(int i)
     {
         int century;
         if (i<1100) century=0;
@@ -121,12 +135,12 @@ class DetermineMasterworkPrice
     //Return: a boolean value based on the user’s input
     public  static boolean userBuyChoice(double d)
     {
-    	System.out.println("The price is" +d +". Do you want to buy? y/n");
+    	System.out.println("The price is " +d +". Do you want to buy? y/n");
     	String choice=UserInterface.getString();
         while (!choice.equalsIgnoreCase("y")&&!choice.equalsIgnoreCase("n"))
         {
             System.out.println("Please enter the correct format, either y or n");
-            System.out.println("The price is" +d +". Do you want to buy? y/n");
+            System.out.println("The price is " +d +". Do you want to buy? y/n");
             choice=UserInterface.getString();
         }
 
