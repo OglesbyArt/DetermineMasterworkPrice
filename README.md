@@ -7,6 +7,8 @@ package oglesby;
 
 import java.util.*;
 
+import java.text.*;
+
 
 class DetermineMasterworkPrice
 {
@@ -86,7 +88,7 @@ class DetermineMasterworkPrice
     	Date currentDate =new Date();
     	Calendar cal = Calendar.getInstance();
         cal.setTime(dateOfWork);
-        int dateOfWorkYear = cal.get(Calendar.YEAR);
+        double dateOfWorkYear = cal.get(Calendar.YEAR);
 
 
         auctiondate=ap.findDate(artistLastName,medium, subject,  area);
@@ -102,7 +104,6 @@ class DetermineMasterworkPrice
 
 
    	double c= determineCenturyOfCreation(dateOfWorkYear);
-        System.out.println(c);
     	if (c==20)
     		return masterworkPrice*.25;
     	else
@@ -120,7 +121,7 @@ class DetermineMasterworkPrice
     //  is a value between 12 and 21
     //Pre: the argument must be an int value that has to be in the 4th digits
     //Return: the century of creation for the date
-    public  static double determineCenturyOfCreation(int i)
+    public  static double determineCenturyOfCreation(double i)
     {
         int century;
         if (i<1100) century=0;
@@ -143,12 +144,15 @@ class DetermineMasterworkPrice
     //Return: a boolean value based on the user’s input
     public  static boolean userBuyChoice(double d)
     {
-    	System.out.println("The Suggested Maximum Purchase Price is " +d +". Do you want to buy? y/n");
+    	DecimalFormat dec = new DecimalFormat("#.##");
+        DecimalFormat comma = new DecimalFormat("#,###.00");
+        double doubleComma =Double.parseDouble(dec.format(d));
+        System.out.println("The Suggested Maximum Purchase Price is $" +comma.format(doubleComma)+". Do you want to buy? y/n");
     	String choice=UserInterface.getString();
         while (!choice.equalsIgnoreCase("y")&&!choice.equalsIgnoreCase("n"))
         {
             System.out.println("Please enter the correct format, either y or n");
-            System.out.println("The Suggested Maximum Purchase Price is " +d +". Do you want to buy? y/n");
+            System.out.println("The Suggested Maximum Purchase Price is $" +comma.format(doubleComma) +". Do you want to buy? y/n");
             choice=UserInterface.getString();
         }
 
