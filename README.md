@@ -20,7 +20,7 @@ class DetermineMasterworkPrice
      //Post: Creates a new DetermineMasterworkPrice
      public DetermineMasterworkPrice()
      {
-    	executeDetermineMasterworkPrice();
+    	     executeDetermineMasterworkPrice();
      }
 
     //Desc: Executes the major methods that allow a user to buy a painting.
